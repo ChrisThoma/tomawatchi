@@ -1,0 +1,43 @@
+DEVELOPERS:
+
+DESIGNERS:
+WHAT WE NEED:
+	- Gifs/Sequences of images of a character
+		• Multiple eventually
+	- Wireframes
+	- Comps (?)
+
+WHAT THEY NEED:
+- Details about what the app does
+	FIRST VIEW:
+
+
+	• view animated pet
+		∆ here's a youtube example of what we're going for https://www.youtube.com/watch?v=gKtHSuELsc0
+	• view the health/happiness/hunger of your pet
+		∆ pet has a defined lifecycle [each age a different looking pet (baby, teen, adult, elderly)]
+	• feed/clean up after your pet quickly
+		∆ floating action buttons?
+		∆ separate one touch feeding/cleaning buttons
+	• see your stats for the current pet
+		∆ total steps (during this pet's lifetime)
+
+	SECOND VIEW: (Table)
+
+	• see past pets stats
+		∆ average happiness, age (if it dies from neglect)
+	• see your past stats (fitness-wise)
+		∆ each pet is a piece of your fitness broken down into a time-frame
+		∆ also see total stats (how each piece adds up)
+
+	THIRD VIEW:
+	• create new pets (only 1 at a time)
+
+- What the watch should do
+
+	• view your animated pet
+	• quickly feed/clean up after your pet
+	• get reminders if you're being neglectful to your pet
+	• see your steps during this pet's lifetime
+
+

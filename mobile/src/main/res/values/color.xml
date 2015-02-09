@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="green">#9ef0b0</color>
+    <color name="pressed_green">#6BBD7D</color>
+    <color name="ripple_green">#388A4A</color>
+    <color name="blue">#81E4FE</color>
+    <color name="pressed_blue">#68CBE5</color>
+    <color name="ripple_blue">#3598B2</color>
+    <color name="yellow">#fdf5a1</color>
+    <color name="darker_yellow">#f4d432</color>
+    <color name="pressed_darker_yellow">#DBBB19</color>
+    <color name="ripple_darker_yellow">#C1A100</color>
+</resources>
