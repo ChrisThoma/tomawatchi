@@ -2,7 +2,10 @@ package com.christhoma.tomawatchi.fragment;
 
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.christhoma.tomawatchi.Const;
 import com.christhoma.tomawatchi.R;
 import com.christhoma.tomawatchi.activity.MainActivity;
 import com.christhoma.tomawatchi.activity.OtherActivity;
@@ -77,6 +81,12 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
     private static final String DATE_FORMAT = "yyyy.MM.dd HH:mm:ss";
     DataReadResult dataReadResult;
     public GoogleApiClient client = null;
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshProgressBars();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +95,9 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onResume() {
+        IntentFilter iF = new IntentFilter();
+        iF.addAction(Const.UPDATE_PET);
+        getActivity().registerReceiver(broadcastReceiver, iF);
         Tomawatchi tomawatchi = ((MainActivity)getActivity()).pet;
         hunger.setProgress(tomawatchi.hunger);
         fitness.setProgress(tomawatchi.fitness);
@@ -138,6 +151,7 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
                     hunger = 100;
                 } else {
                     ((MainActivity)getActivity()).pet.hunger += 25;
+                    ((MainActivity)getActivity()).savePetStats();
                 }
                 refreshProgressBars();
             }
@@ -165,6 +179,7 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     public void refreshProgressBars() {
+        ((MainActivity)getActivity()).updatePetStats();
         Tomawatchi pet = ((MainActivity)getActivity()).pet;
         fitness.setProgress(pet.fitness);
         hunger.setProgress(pet.hunger);

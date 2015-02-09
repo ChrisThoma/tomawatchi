@@ -1,18 +1,26 @@
 package com.christhoma.tomawatchi.activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.LoaderManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.christhoma.tomawatchi.Const;
 import com.christhoma.tomawatchi.R;
 import com.christhoma.tomawatchi.api.Tomawatchi;
 import com.christhoma.tomawatchi.fragment.PetViewFragment;
+import com.christhoma.tomawatchi.service.PetPointsReceiver;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.Scopes;
@@ -28,7 +36,7 @@ import java.util.Date;
 import butterknife.ButterKnife;
 
 
-public class MainActivity extends ActionBarActivity  {
+public class MainActivity extends ActionBarActivity {
 
     //Google fit variables
     private static final int REQUEST_OAUTH = 1;
@@ -38,25 +46,15 @@ public class MainActivity extends ActionBarActivity  {
     private OnDataPointListener listener;
     private static final String DATE_FORMAT = "yyyy.MM.dd HH:mm:ss";
 
-    public Tomawatchi pet;
 
-    public static String TAG = "fit";
-    public static String PREFS = "watchagatchi";
-    public static String TIME =  "pettime";
-    public static String HUNGER = "pethunger";
-    public static String FITNESS = "petfitness";
-    public static String TOTALSTEPS = "totalsteps";
-    public static String NAME = "petname";
-    public static String AGE = "petage";
-    public static String OPENED = "opened";
-    public static String STARTDATE = "startDate";
+    public Tomawatchi pet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-        if (!getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean(OPENED, false)) {
+        if (!getSharedPreferences(Const.PREFS, MODE_PRIVATE).getBoolean(Const.OPENED, false)) {
             pet = new Tomawatchi();
             pet.hunger = 90;
             pet.fitness = 100;
@@ -66,7 +64,14 @@ public class MainActivity extends ActionBarActivity  {
             pet.overallHappiness = pet.getOverallHappiness();
             pet.startDate = new Date().getTime();
             savePetStats();
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            Intent intent = new Intent(this, PetPointsReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+            Calendar calendar = Calendar.getInstance();
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 10 * 1000, pendingIntent);
         }
+
+
 
         if (savedInstanceState != null) {
             authInProgress = savedInstanceState.getBoolean(AUTH_PENDING);
@@ -76,7 +81,7 @@ public class MainActivity extends ActionBarActivity  {
         PetViewFragment petViewFragment = new PetViewFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_frame, petViewFragment).commit();
-        getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(OPENED, true).apply();
+        getSharedPreferences(Const.PREFS, MODE_PRIVATE).edit().putBoolean(Const.OPENED, true).apply();
     }
 
     @Override
@@ -95,14 +100,15 @@ public class MainActivity extends ActionBarActivity  {
     }
 
     public void savePetStats() {
-        SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(Const.PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         Date date = new Date();
-        editor.putLong(TIME, date.getTime());
-        editor.putString(NAME, pet.name);
-        editor.putInt(TOTALSTEPS, pet.totalSteps);
-        editor.putInt(FITNESS, pet.fitness);
-        editor.putInt(HUNGER, pet.hunger);
+        editor.putLong(Const.TIME, date.getTime());
+        editor.putString(Const.NAME, pet.name);
+        editor.putInt(Const.TOTALSTEPS, pet.totalSteps);
+        editor.putInt(Const.FITNESS, pet.fitness);
+        editor.putInt(Const.HUNGER, pet.hunger);
+        editor.putInt(Const.CLEANLINESS, pet.cleanliness);
         editor.apply();
     }
 
@@ -110,23 +116,17 @@ public class MainActivity extends ActionBarActivity  {
         if (pet == null) {
             pet = new Tomawatchi();
         }
-        SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(Const.PREFS, MODE_PRIVATE);
         Date date = new Date();
-        Date oldDate = new Date(prefs.getLong(TIME, -1));
-        Date startDate = new Date(prefs.getLong(STARTDATE, -1));
-        pet.name = prefs.getString(NAME, "");
-        pet.totalSteps = prefs.getInt(TOTALSTEPS, -1);
-        pet.fitness = prefs.getInt(FITNESS, -1);
-        pet.hunger = prefs.getInt(HUNGER, -1);
+        Date startDate = new Date(prefs.getLong(Const.STARTDATE, -1));
+        pet.name = prefs.getString(Const.NAME, "");
+        pet.totalSteps = prefs.getInt(Const.TOTALSTEPS, -1);
+        pet.fitness = prefs.getInt(Const.FITNESS, -1);
+        pet.hunger = prefs.getInt(Const.HUNGER, -1);
+        pet.cleanliness = prefs.getInt(Const.CLEANLINESS, -1);
 
         long startDateDifference = date.getTime() - startDate.getTime();
-        long difference = date.getTime() - oldDate.getTime();
-        long hoursDifference = ((((difference / 1000) / 60)) / 60);
         int daysAlive = (int)((((startDateDifference / 1000) / 60) / 60) / 24);
-        pet.fitness = (int)(pet.fitness - (hoursDifference * 1));
-        pet.hunger = (int)(pet.hunger - (hoursDifference * 1));
-        pet.overallHappiness = pet.getOverallHappiness();
-
         if (daysAlive < 1) {
             pet.age = Tomawatchi.Age.BABY;
         }
@@ -235,4 +235,5 @@ public class MainActivity extends ActionBarActivity  {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
