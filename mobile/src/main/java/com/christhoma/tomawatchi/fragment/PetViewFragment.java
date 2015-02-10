@@ -151,8 +151,8 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
                     hunger = 100;
                 } else {
                     ((MainActivity)getActivity()).pet.hunger += 25;
-                    ((MainActivity)getActivity()).savePetStats();
                 }
+                ((MainActivity)getActivity()).savePetStats();
                 refreshProgressBars();
             }
         });
@@ -211,6 +211,10 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public Loader<DataReadResult> onCreateLoader(int id, Bundle args) {
         return new HistoryLoader(getActivity(), client);
+    }
+
+    public static PetViewFragment newInstance() {
+        return new PetViewFragment();
     }
 
     @Override

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.christhoma.tomawatchi.Const;
 import com.christhoma.tomawatchi.R;
 import com.christhoma.tomawatchi.api.Tomawatchi;
+import com.christhoma.tomawatchi.fragment.PetCreationFragment;
 import com.christhoma.tomawatchi.fragment.PetViewFragment;
 import com.christhoma.tomawatchi.service.PetPointsReceiver;
 import com.google.android.gms.common.ConnectionResult;
@@ -54,34 +55,17 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-        if (!getSharedPreferences(Const.PREFS, MODE_PRIVATE).getBoolean(Const.OPENED, false)) {
-            pet = new Tomawatchi();
-            pet.hunger = 90;
-            pet.fitness = 100;
-            pet.cleanliness = 85;
-            pet.age = Tomawatchi.Age.BABY;
-            pet.name = "ok";
-            pet.overallHappiness = pet.getOverallHappiness();
-            pet.startDate = new Date().getTime();
-            savePetStats();
-            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            Intent intent = new Intent(this, PetPointsReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-            Calendar calendar = Calendar.getInstance();
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 10 * 1000, pendingIntent);
+        if (!getSharedPreferences(Const.PREFS, MODE_PRIVATE).getBoolean(Const.PET_CREATED, false)) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, PetCreationFragment.newInstance()).commit();
+        } else {
+            continueToPetView();
         }
-
-
 
         if (savedInstanceState != null) {
             authInProgress = savedInstanceState.getBoolean(AUTH_PENDING);
         }
         buildFitClient();
-
-        PetViewFragment petViewFragment = new PetViewFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_frame, petViewFragment).commit();
-        getSharedPreferences(Const.PREFS, MODE_PRIVATE).edit().putBoolean(Const.OPENED, true).apply();
     }
 
     @Override
@@ -194,6 +178,11 @@ public class MainActivity extends ActionBarActivity {
                         }
                     }
                 }).build();
+    }
+
+    public void continueToPetView() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_frame, PetViewFragment.newInstance()).commit();
     }
 
     @Override

@@ -18,7 +18,6 @@ public class PetPointsReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "ok hi", Toast.LENGTH_SHORT).show();
         SharedPreferences prefs = context.getSharedPreferences(Const.PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         int fitness = prefs.getInt(Const.FITNESS, -1) - 1;

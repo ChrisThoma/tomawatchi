@@ -16,4 +16,5 @@ public class Const {
     public static String STARTDATE = "startDate";
     public static String CLEANLINESS = "cleanliness";
     public static String UPDATE_PET = "updatePet";
+    public static String PET_CREATED = "petCreated";
 }
