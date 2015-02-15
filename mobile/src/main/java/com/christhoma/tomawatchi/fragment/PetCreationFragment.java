@@ -121,9 +121,9 @@ public class PetCreationFragment extends Fragment {
                 if (editName.getText().length() > 0) {
                     Tomawatchi pet = new Tomawatchi();
 
-                    pet.hunger = 75;
-                    pet.fitness = 75;
-                    pet.cleanliness = 100;
+                    pet.hunger = 76;
+                    pet.fitness = 76;
+                    pet.cleanliness = 101;
                     pet.age = Tomawatchi.Age.BABY;
                     String name = editName.getText().toString().replaceAll(" ", "");
                     pet.name = name;

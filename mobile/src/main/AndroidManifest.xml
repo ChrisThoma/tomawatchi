@@ -10,16 +10,11 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/app_name"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".activity.OtherActivity"
-            android:label="@string/title_activity_other" >
         </activity>
 
         <receiver android:name=".service.PetPointsReceiver" >
@@ -35,8 +30,7 @@
         <activity android:name=".activity.PetDetailActivity" >
         </activity>
         <activity
-            android:name=".activity.AboutActivity"
-            android:label="@string/title_activity_about" >
+            android:name=".activity.AboutActivity">
         </activity>
     </application>
 

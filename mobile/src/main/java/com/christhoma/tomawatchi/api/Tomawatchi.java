@@ -14,6 +14,7 @@ public class Tomawatchi {
     public long startDate;
     public int todaysSteps;
     public int originalSteps;
+    public int fitnessTotalStepsCount;
 
     public enum Age {
         BABY, TEEN, ADULT, ELDERLY, DEDZO

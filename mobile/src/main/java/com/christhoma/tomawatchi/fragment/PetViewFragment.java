@@ -18,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +69,12 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
     TextView numberOfSteps;
     @InjectView(R.id.progress)
     ProgressBar loadingProgress;
+    @InjectView(R.id.pet_health_layout)
+    LinearLayout healthLayout;
+    @InjectView(R.id.pet_cleanliness_layout)
+    LinearLayout cleanlinessLayout;
+    @InjectView(R.id.pet_hunger_layout)
+    LinearLayout hungerLayout;
 
     //FitData
     public static String TAG = "fit";
@@ -87,21 +95,22 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onResume() {
+        if (getActivity() != null) {
+            client = ((MainActivity) getActivity()).client;
+            refreshFitData();
+        }
         IntentFilter iF = new IntentFilter();
         iF.addAction(Const.UPDATE_PET);
         getActivity().registerReceiver(broadcastReceiver, iF);
         Tomawatchi tomawatchi = ((MainActivity) getActivity()).pet;
         petName.setText(tomawatchi.name);
-        if (getActivity() != null) {
-            client = ((MainActivity) getActivity()).client;
-        }
-        refreshFitData();
         super.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        getActivity().unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -130,12 +139,13 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
                 notificationManager.notify(1, notificationBuilder.build());
             }
         });
+
         feedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int hunger = ((MainActivity) getActivity()).pet.hunger;
                 if (hunger + 25 > 100) {
-                    hunger = 100;
+                    ((MainActivity) getActivity()).pet.hunger = 100;
                 } else {
                     ((MainActivity) getActivity()).pet.hunger += 25;
                 }
@@ -143,12 +153,13 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
                 refreshFitData();
             }
         });
+
         cleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int cleanliness = ((MainActivity) getActivity()).pet.cleanliness;
                 if (cleanliness + 25 > 100) {
-                    cleanliness = 100;
+                    ((MainActivity) getActivity()).pet.cleanliness = 100;
                 } else {
                     ((MainActivity) getActivity()).pet.cleanliness += 25;
                 }
@@ -156,6 +167,7 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
                 refreshFitData();
             }
         });
+
         arrowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,22 +191,80 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
     public void refreshContent(Tomawatchi pet) {
         setContentVisible(true);
         //update UI here
+        int fullImageCount = pet.fitness / 25;
+        int emptyImageCount = 4 - fullImageCount;
+        for (int i = 0; i < fullImageCount; i++) {
+            ImageView fullHeart = new ImageView(getActivity());
+            fullHeart.setVisibility(View.VISIBLE);
+            fullHeart.setImageDrawable(getResources().getDrawable(R.drawable.ic_heart_full));
+            fullHeart.setPadding(4, 0, 4, 0);
+            healthLayout.addView(fullHeart);
+        }
+        for (int j = 0; j < emptyImageCount; j++) {
+            ImageView emptyHeart = new ImageView(getActivity());
+            emptyHeart.setVisibility(View.VISIBLE);
+            emptyHeart.setImageDrawable(getResources().getDrawable(R.drawable.ic_heart_outline));
+            emptyHeart.setPadding(4, 0, 4, 0);
+            healthLayout.addView(emptyHeart);
+        }
+
+        fullImageCount = pet.hunger / 25;
+        emptyImageCount = 4 - fullImageCount;
+        for (int i = 0; i < fullImageCount; i++) {
+            ImageView fullHeart = new ImageView(getActivity());
+            fullHeart.setVisibility(View.VISIBLE);
+            fullHeart.setImageDrawable(getResources().getDrawable(R.drawable.ic_food_full));
+            fullHeart.setPadding(4, 0, 4, 0);
+            hungerLayout.addView(fullHeart);
+        }
+        for (int j = 0; j < emptyImageCount; j++) {
+            ImageView emptyHeart = new ImageView(getActivity());
+            emptyHeart.setVisibility(View.VISIBLE);
+            emptyHeart.setImageDrawable(getResources().getDrawable(R.drawable.ic_food_outline));
+            emptyHeart.setPadding(4, 0, 4, 0);
+            hungerLayout.addView(emptyHeart);
+        }
+
+        fullImageCount = pet.cleanliness / 25;
+        emptyImageCount = 4 - fullImageCount;
+        for (int i = 0; i < fullImageCount; i++) {
+            ImageView fullHeart = new ImageView(getActivity());
+            fullHeart.setVisibility(View.VISIBLE);
+            fullHeart.setImageDrawable(getResources().getDrawable(R.drawable.ic_clean_full));
+            fullHeart.setPadding(4, 0, 4, 0);
+            cleanlinessLayout.addView(fullHeart);
+        }
+        for (int j = 0; j < emptyImageCount; j++) {
+            ImageView emptyHeart = new ImageView(getActivity());
+            emptyHeart.setVisibility(View.VISIBLE);
+            emptyHeart.setImageDrawable(getResources().getDrawable(R.drawable.ic_clean_outline));
+            emptyHeart.setPadding(4, 0, 4, 0);
+            cleanlinessLayout.addView(emptyHeart);
+        }
     }
 
     public void setContentVisible(boolean contentVisible) {
         if (contentVisible) {
             gifImageView.setVisibility(View.VISIBLE);
-            notificationButton.setVisibility(View.VISIBLE);
+//            notificationButton.setVisibility(View.VISIBLE);
+            healthLayout.setVisibility(View.VISIBLE);
+            hungerLayout.setVisibility(View.VISIBLE);
+            cleanlinessLayout.setVisibility(View.VISIBLE);
             feedButton.setVisibility(View.VISIBLE);
             cleanButton.setVisibility(View.VISIBLE);
             arrowButton.setVisibility(View.VISIBLE);
             loadingProgress.setVisibility(View.GONE);
+            numberOfSteps.setVisibility(View.VISIBLE);
         } else {
 //            gifImageView.setVisibility(View.GONE);
-            notificationButton.setVisibility(View.GONE);
+//            notificationButton.setVisibility(View.GONE);
+            healthLayout.removeAllViews();
+            hungerLayout.removeAllViews();
+            cleanlinessLayout.removeAllViews();
             feedButton.setVisibility(View.GONE);
             cleanButton.setVisibility(View.GONE);
             arrowButton.setVisibility(View.GONE);
+            numberOfSteps.setVisibility(View.INVISIBLE);
             loadingProgress.setVisibility(View.VISIBLE);
         }
     }
@@ -241,10 +311,10 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
         int todaysSteps = 0;
         for (DataPoint dp : dataSet.getDataPoints()) {
             for (Field field : dp.getDataType().getFields()) {
-                numberOfSteps.setText("" + dp.getValue(field) + " steps");
                 todaysSteps = dp.getValue(field).asInt();
             }
         }
+        numberOfSteps.setText(todaysSteps +  " steps");
         ((MainActivity) getActivity()).pet.todaysSteps = todaysSteps;
     }
 

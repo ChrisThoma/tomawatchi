@@ -28,6 +28,7 @@
             android:layout_marginRight="@dimen/default_margin"
             android:visibility="gone"
             android:src="@drawable/btn_go"
+            fab:fab_type="mini"
             fab:fab_colorNormal="@color/darker_yellow"
             fab:fab_colorPressed="@color/pressed_darker_yellow"
             fab:fab_colorRipple="@color/ripple_darker_yellow" />
@@ -65,6 +66,32 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@id/number_of_steps"
             android:text="@string/today"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/pet_health_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:layout_marginLeft="@dimen/default_margin"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/pet_cleanliness_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/pet_hunger_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="@dimen/default_margin"
+            android:layout_alignParentRight="true"/>
 
     </RelativeLayout>
 
@@ -90,7 +117,7 @@
             android:layout_below="@id/gif"
             android:layout_centerHorizontal="true"
             android:text="NOTIFICATION"
-            android:visibility="gone" />
+            android:visibility="invisible" />
 
         <com.melnykov.fab.FloatingActionButton
             android:id="@+id/feed_button"
@@ -114,7 +141,7 @@
             android:layout_alignParentLeft="true"
             android:layout_margin="@dimen/default_margin"
             android:visibility="gone"
-            android:src="@drawable/btn_info"
+            android:src="@drawable/btn_clean"
             fab:fab_colorNormal="@color/blue"
             fab:fab_colorPressed="@color/pressed_blue"
             fab:fab_colorRipple="@color/ripple_blue" />

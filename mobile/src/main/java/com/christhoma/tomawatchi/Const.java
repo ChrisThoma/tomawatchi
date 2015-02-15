@@ -18,6 +18,7 @@ public class Const {
     public static String TODAY_STEPS = "todaySteps";
     public static String TOTAL_STEPS_AT_CREATION = "totalstepsatcreation";
     public static String AVERAGE_STEPS = "averagesteps";
+    public static String FITNESS_TOTAL_STEP_COUNT = "fitnesstotalstepcount";
 
     public static String SHUT_DOWN_TIME = "shutdowntime";
     public static String START_UP_TIME = "startuptime";

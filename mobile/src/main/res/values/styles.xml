@@ -4,12 +4,19 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <item name="android:actionBarStyle">@style/TomagatchiActionBar</item>
         <item name="actionBarStyle">@style/TomagatchiActionBar</item>
+        <item name="android:colorPrimary">@color/yellow</item>
+        <item name="colorPrimary">@color/yellow</item>
+        <item name="android:statusBarColor">@color/darker_yellow</item>
+        <item name="android:homeAsUpIndicator">@drawable/btn_back</item>
         <!-- Customize your theme here. -->
     </style>
 
     <style name="TomagatchiActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/yellow</item>
         <item name="background">@color/yellow</item>
+        <item name="logo">@drawable/text_title_bar_tamawatchi</item>
+        <item name="android:logo">@drawable/text_title_bar_tamawatchi</item>
+        <item name="android:displayOptions">useLogo|showHome</item>
     </style>
 
     <style name="PetDetailItemTitle">

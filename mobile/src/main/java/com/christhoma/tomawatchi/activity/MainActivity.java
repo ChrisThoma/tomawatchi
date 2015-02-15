@@ -334,10 +334,21 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
             }
         }
         pet.totalSteps = totalSteps;
-        int stepPoints = (totalSteps - previousTotalSteps) / 1000;
-        stepPoints *= 5;
-        pet.fitness += stepPoints;
-        editor.putInt(Const.TOTALSTEPS, pet.totalSteps).apply();
+        if (previousTotalSteps > 0) {
+            int stepPoints = (totalSteps - previousTotalSteps) / 1000;
+            if (stepPoints > 0) {
+                stepPoints *= 5;
+                if (pet.fitness + stepPoints > 100) {
+                    pet.fitness = 100;
+                } else {
+                    pet.fitness += stepPoints;
+                }
+                pet.fitness += stepPoints;
+                editor.putInt(Const.TOTALSTEPS, pet.totalSteps).apply();
+            }
+        } else {
+            editor.putInt(Const.TOTALSTEPS, pet.totalSteps).apply();
+        }
         PetViewFragment fragment = (PetViewFragment) getSupportFragmentManager().findFragmentByTag(PetViewFragment.PET_FRAGMENT_TAG);
         if (fragment != null) {
             fragment.refreshContent(pet);

@@ -22,4 +22,10 @@
     <string name="birthday">Birthday / Age</string>
     <string name="title_activity_about">AboutActivity</string>
 
+    <!-- ABOUT SCREEN -->
+    <string name="about_us">Chris Thoma, Steven Bishop, &amp; Tes Tabilas</string>
+    <string name="about_made_by">Made By</string>
+    <string name="about_contact">Contact</string>
+    <string name="about_description">Keep fit by walking your Tomawatchi. Don\'t forget to feed and bathe your pet too!</string>
+
 </resources>

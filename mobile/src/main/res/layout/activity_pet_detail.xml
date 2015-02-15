@@ -75,22 +75,49 @@
     <View style="@style/PetDetailDivider" />
 
     <RelativeLayout
+        android:id="@+id/health_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/health_layout">
+        android:layout_height="wrap_content">
+
         <oak.widget.TextViewWithFont
-            style="@style/PetDetailItemTitle"
-            android:text="@string/health_average"
             android:id="@+id/detail_health_average"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"/>
-        <oak.widget.TextViewWithFont
             style="@style/PetDetailItemTitle"
-            android:text="@string/today"
-            android:id="@+id/detail_today_health"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"/>
+            android:text="@string/health_average" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/detail_health_average_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/quarter_default_margin"
+            android:layout_below="@id/detail_health_average"
+            android:layout_alignParentLeft="true">
+
+        </LinearLayout>
+
+        <oak.widget.TextViewWithFont
+            android:id="@+id/detail_today_health"
+            style="@style/PetDetailItemTitle"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/today" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/detail_health_today_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/quarter_default_margin"
+            android:layout_below="@id/detail_today_health"
+            android:layout_alignParentRight="true">
+
+        </LinearLayout>
     </RelativeLayout>
+
+    <View
+        style="@style/PetDetailDivider"/>
 
 
 </LinearLayout>

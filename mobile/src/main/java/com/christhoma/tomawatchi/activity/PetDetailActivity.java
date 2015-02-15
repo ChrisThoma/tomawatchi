@@ -1,10 +1,14 @@
 package com.christhoma.tomawatchi.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.christhoma.tomawatchi.Const;
@@ -33,15 +37,25 @@ public class PetDetailActivity extends ActionBarActivity {
     TextView todaySteps;
     @InjectView(R.id.detail_total_steps)
     TextView totalSteps;
+    @InjectView(R.id.detail_health_average_layout)
+    LinearLayout averageHealthLayout;
+    @InjectView(R.id.detail_health_today_layout)
+    LinearLayout todayHealthLayout;
+
     Tomawatchi pet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet_detail);
-        setTitle(getString(R.string.tomawatchi));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         ButterKnife.inject(this);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setIcon(R.drawable.text_title_bar_tamawatchi);
+
         if (pet == null) {
             pet = new Tomawatchi();
         }
@@ -58,6 +72,7 @@ public class PetDetailActivity extends ActionBarActivity {
         pet.startDate = startDate.getTime();
         pet.originalSteps = prefs.getInt(Const.TOTAL_STEPS_AT_CREATION, -1);
         int avgStepsCount = prefs.getInt(Const.AVERAGE_STEPS, -1);
+        setHealthIcons(avgStepsCount);
 
         totalSteps.setText("" + (pet.totalSteps - pet.originalSteps) + " steps");
         petName.setText(pet.name);
@@ -69,6 +84,42 @@ public class PetDetailActivity extends ActionBarActivity {
         averageSteps.setText("" + avgStepsCount);
         todaySteps.setText("" + pet.todaysSteps);
 
+    }
+
+    public void setHealthIcons(int averageStepsCount) {
+        int fullHeartsCount = pet.fitness / 25;
+        int emptyHeartsCount = 4 - fullHeartsCount;
+        for (int i = 0; i < fullHeartsCount; i++) {
+            ImageView fullHeart = new ImageView(this);
+            fullHeart.setVisibility(View.VISIBLE);
+            fullHeart.setImageDrawable(getDrawable(R.drawable.ic_heart_full));
+            fullHeart.setPadding(4, 0, 4, 0);
+            todayHealthLayout.addView(fullHeart);
+        }
+        for (int j = 0; j < emptyHeartsCount; j++) {
+            ImageView emptyHeart = new ImageView(this);
+            emptyHeart.setVisibility(View.VISIBLE);
+            emptyHeart.setImageDrawable(getDrawable(R.drawable.ic_heart_outline));
+            emptyHeart.setPadding(4, 0, 4, 0);
+            todayHealthLayout.addView(emptyHeart);
+        }
+
+        fullHeartsCount = Math.min((averageStepsCount / 1250), 4);
+        emptyHeartsCount = 4 - fullHeartsCount;
+        for (int i = 0; i < fullHeartsCount; i++) {
+            ImageView fullHeart = new ImageView(this);
+            fullHeart.setVisibility(View.VISIBLE);
+            fullHeart.setImageDrawable(getDrawable(R.drawable.ic_heart_full));
+            fullHeart.setPadding(4, 0, 4, 0);
+            averageHealthLayout.addView(fullHeart);
+        }
+        for (int j = 0; j < emptyHeartsCount; j++) {
+            ImageView emptyHeart = new ImageView(this);
+            emptyHeart.setVisibility(View.VISIBLE);
+            emptyHeart.setImageDrawable(getDrawable(R.drawable.ic_heart_outline));
+            emptyHeart.setPadding(4, 0, 4, 0);
+            averageHealthLayout.addView(emptyHeart);
+        }
     }
 
     @Override
@@ -91,7 +142,7 @@ public class PetDetailActivity extends ActionBarActivity {
             onBackPressed();
             return true;
         } else if (id == R.id.action_about) {
-            // display about activity
+            startActivity(new Intent(this, AboutActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
