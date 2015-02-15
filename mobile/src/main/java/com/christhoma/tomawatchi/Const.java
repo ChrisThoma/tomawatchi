@@ -6,15 +6,21 @@ package com.christhoma.tomawatchi;
 public class Const {
     public static String TAG = "fit";
     public static String PREFS = "watchagatchi";
-    public static String TIME =  "pettime";
+    public static String PET_CREATED = "petCreated";
+
+    //pet stats
     public static String HUNGER = "pethunger";
+    public static String CLEANLINESS = "cleanliness";
     public static String FITNESS = "petfitness";
     public static String TOTALSTEPS = "totalsteps";
     public static String NAME = "petname";
-    public static String AGE = "petage";
-    public static String OPENED = "opened";
     public static String STARTDATE = "startDate";
-    public static String CLEANLINESS = "cleanliness";
+    public static String TODAY_STEPS = "todaySteps";
+    public static String TOTAL_STEPS_AT_CREATION = "totalstepsatcreation";
+    public static String AVERAGE_STEPS = "averagesteps";
+
+    public static String SHUT_DOWN_TIME = "shutdowntime";
+    public static String START_UP_TIME = "startuptime";
+
     public static String UPDATE_PET = "updatePet";
-    public static String PET_CREATED = "petCreated";
 }

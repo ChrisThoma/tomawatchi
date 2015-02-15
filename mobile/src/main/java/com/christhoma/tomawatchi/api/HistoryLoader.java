@@ -32,12 +32,12 @@ public class HistoryLoader extends OakAsyncLoader<DataReadResult> {
         Date now = new Date();
         cal.setTime(now);
         long endTime = cal.getTimeInMillis();
-        cal.add(Calendar.YEAR, -1);
+        cal.add(Calendar.YEAR, -2);
         long startTime = cal.getTimeInMillis();
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .aggregate(DataType.TYPE_STEP_COUNT_DELTA, DataType.AGGREGATE_STEP_COUNT_DELTA)
-                .bucketByTime(365, TimeUnit.DAYS)
+                .bucketByTime(730, TimeUnit.DAYS)
                 .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
                 .build();
 

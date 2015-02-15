@@ -18,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +26,8 @@ import com.christhoma.tomawatchi.Const;
 import com.christhoma.tomawatchi.R;
 import com.christhoma.tomawatchi.activity.MainActivity;
 import com.christhoma.tomawatchi.activity.OtherActivity;
-import com.christhoma.tomawatchi.api.HistoryLoader;
+import com.christhoma.tomawatchi.activity.PetDetailActivity;
+import com.christhoma.tomawatchi.api.SingleDayLoader;
 import com.christhoma.tomawatchi.api.Tomawatchi;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.fitness.data.Bucket;
@@ -37,14 +37,11 @@ import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.result.DataReadResult;
 import com.melnykov.fab.FloatingActionButton;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
 /**
@@ -52,6 +49,7 @@ import pl.droidsonroids.gif.GifImageView;
  */
 public class PetViewFragment extends Fragment implements LoaderManager.LoaderCallbacks<DataReadResult> {
 
+    public static String PET_FRAGMENT_TAG = "PETFRAGMENTTAG";
     //Views
     @InjectView(R.id.gif)
     GifImageView gifImageView;
@@ -63,18 +61,12 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
     FloatingActionButton arrowButton;
     @InjectView(R.id.notification_button)
     Button notificationButton;
-    @InjectView(R.id.step_count)
-    TextView stepCount;
-    @InjectView(R.id.happiness_progress)
-    ProgressBar happiness;
-    @InjectView(R.id.fitness_progress)
-    ProgressBar fitness;
-    @InjectView(R.id.hunger_progress)
-    ProgressBar hunger;
-    @InjectView(R.id.loading_progres)
+    @InjectView(R.id.pet_name_text)
+    TextView petName;
+    @InjectView(R.id.number_of_steps)
+    TextView numberOfSteps;
+    @InjectView(R.id.progress)
     ProgressBar loadingProgress;
-    @InjectView(R.id.progress_layout)
-    LinearLayout progressLayout;
 
     //FitData
     public static String TAG = "fit";
@@ -84,7 +76,7 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            refreshProgressBars();
+            refreshFitData();
         }
     };
 
@@ -98,10 +90,12 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
         IntentFilter iF = new IntentFilter();
         iF.addAction(Const.UPDATE_PET);
         getActivity().registerReceiver(broadcastReceiver, iF);
-        Tomawatchi tomawatchi = ((MainActivity)getActivity()).pet;
-        hunger.setProgress(tomawatchi.hunger);
-        fitness.setProgress(tomawatchi.fitness);
-        happiness.setProgress(tomawatchi.overallHappiness);
+        Tomawatchi tomawatchi = ((MainActivity) getActivity()).pet;
+        petName.setText(tomawatchi.name);
+        if (getActivity() != null) {
+            client = ((MainActivity) getActivity()).client;
+        }
+        refreshFitData();
         super.onResume();
     }
 
@@ -136,71 +130,68 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
                 notificationManager.notify(1, notificationBuilder.build());
             }
         });
-        gifImageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                refreshProgressBars();
-                return true;
-            }
-        });
         feedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int hunger = ((MainActivity)getActivity()).pet.hunger;
+                int hunger = ((MainActivity) getActivity()).pet.hunger;
                 if (hunger + 25 > 100) {
                     hunger = 100;
                 } else {
-                    ((MainActivity)getActivity()).pet.hunger += 25;
+                    ((MainActivity) getActivity()).pet.hunger += 25;
                 }
-                ((MainActivity)getActivity()).savePetStats();
-                refreshProgressBars();
-            }
-        });
-        stepCount.setText("0000");
-        stepCount.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+                ((MainActivity) getActivity()).savePetStats();
                 refreshFitData();
-                return true;
             }
         });
-        if (getActivity() != null) {
-            client = ((MainActivity)getActivity()).client;
-        }
-
-        refreshFitData();
-
+        cleanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int cleanliness = ((MainActivity) getActivity()).pet.cleanliness;
+                if (cleanliness + 25 > 100) {
+                    cleanliness = 100;
+                } else {
+                    ((MainActivity) getActivity()).pet.cleanliness += 25;
+                }
+                ((MainActivity) getActivity()).savePetStats();
+                refreshFitData();
+            }
+        });
+        arrowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), PetDetailActivity.class));
+            }
+        });
         super.onViewCreated(view, savedInstanceState);
     }
 
     public void refreshFitData() {
         setContentVisible(false);
+        updateStats();
         getActivity().getSupportLoaderManager().restartLoader(1, null, this);
     }
 
-    public void refreshProgressBars() {
-        ((MainActivity)getActivity()).updatePetStats();
-        Tomawatchi pet = ((MainActivity)getActivity()).pet;
-        fitness.setProgress(pet.fitness);
-        hunger.setProgress(pet.hunger);
-        happiness.setProgress(pet.getOverallHappiness());
+    public void updateStats() {
+        ((MainActivity) getActivity()).updatePetStats();
+        setContentVisible(false);
+    }
+
+    public void refreshContent(Tomawatchi pet) {
+        setContentVisible(true);
+        //update UI here
     }
 
     public void setContentVisible(boolean contentVisible) {
         if (contentVisible) {
-            progressLayout.setVisibility(View.VISIBLE);
             gifImageView.setVisibility(View.VISIBLE);
             notificationButton.setVisibility(View.VISIBLE);
-            stepCount.setVisibility(View.VISIBLE);
             feedButton.setVisibility(View.VISIBLE);
             cleanButton.setVisibility(View.VISIBLE);
             arrowButton.setVisibility(View.VISIBLE);
             loadingProgress.setVisibility(View.GONE);
         } else {
-            progressLayout.setVisibility(View.GONE);
-            gifImageView.setVisibility(View.GONE);
+//            gifImageView.setVisibility(View.GONE);
             notificationButton.setVisibility(View.GONE);
-            stepCount.setVisibility(View.GONE);
             feedButton.setVisibility(View.GONE);
             cleanButton.setVisibility(View.GONE);
             arrowButton.setVisibility(View.GONE);
@@ -210,7 +201,7 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public Loader<DataReadResult> onCreateLoader(int id, Bundle args) {
-        return new HistoryLoader(getActivity(), client);
+        return new SingleDayLoader(getActivity(), client);
     }
 
     public static PetViewFragment newInstance() {
@@ -230,12 +221,7 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     private void printData(DataReadResult dataReadResult) {
-        // [START parse_read_data_result]
-        // If the DataReadRequest object specified aggregated data, dataReadResult will be returned
-        // as buckets containing DataSets, instead of just DataSets.
         if (dataReadResult.getBuckets().size() > 0) {
-            Log.i("fit", "Number of returned buckets of DataSets is: "
-                    + dataReadResult.getBuckets().size());
             for (Bucket bucket : dataReadResult.getBuckets()) {
                 List<DataSet> dataSets = bucket.getDataSets();
                 for (DataSet dataSet : dataSets) {
@@ -243,30 +229,23 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
                 }
             }
         } else if (dataReadResult.getDataSets().size() > 0) {
-            Log.i("fit", "Number of returned DataSets is: "
-                    + dataReadResult.getDataSets().size());
             for (DataSet dataSet : dataReadResult.getDataSets()) {
                 dumpDataSet(dataSet);
             }
         }
-        // [END parse_read_data_result]
     }
 
     private void dumpDataSet(DataSet dataSet) {
-        Log.i(TAG, "Data returned for Data type: " + dataSet.getDataType().getName());
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 
+        int todaysSteps = 0;
         for (DataPoint dp : dataSet.getDataPoints()) {
-            Log.i(TAG, "Data point:");
-            Log.i(TAG, "\tType: " + dp.getDataType().getName());
-            Log.i(TAG, "\tStart: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
-            Log.i(TAG, "\tEnd: " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
-            for(Field field : dp.getDataType().getFields()) {
-                Log.i(TAG, "\tField: " + field.getName() +
-                        " Value: " + dp.getValue(field));
-                stepCount.setText("" + dp.getValue(field));
+            for (Field field : dp.getDataType().getFields()) {
+                numberOfSteps.setText("" + dp.getValue(field) + " steps");
+                todaysSteps = dp.getValue(field).asInt();
             }
         }
+        ((MainActivity) getActivity()).pet.todaysSteps = todaysSteps;
     }
 
     @Override

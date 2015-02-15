@@ -10,4 +10,6 @@
     <color name="darker_yellow">#f4d432</color>
     <color name="pressed_darker_yellow">#DBBB19</color>
     <color name="ripple_darker_yellow">#C1A100</color>
+    <color name="light_grey_text">#B8B1AD</color>
+    <color name="darker_detail_text">#5F463C</color>
 </resources>

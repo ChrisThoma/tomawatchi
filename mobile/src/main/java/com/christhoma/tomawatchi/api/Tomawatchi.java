@@ -12,6 +12,8 @@ public class Tomawatchi {
     public int fitness;
     public int hunger;
     public long startDate;
+    public int todaysSteps;
+    public int originalSteps;
 
     public enum Age {
         BABY, TEEN, ADULT, ELDERLY, DEDZO

@@ -1,0 +1,96 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    tools:context="com.christhoma.tomawatchi.activity.PetDetailActivity">
+
+    <oak.widget.TextViewWithFont
+        style="@style/PetDetailItemTitle"
+        android:text="@string/name" />
+
+    <oak.widget.TextViewWithFont
+        android:id="@+id/detail_pet_name"
+        style="@style/PetDetailItem" />
+
+    <View style="@style/PetDetailDivider" />
+
+    <oak.widget.TextViewWithFont
+        style="@style/PetDetailItemTitle"
+        android:text="@string/birthday" />
+
+    <oak.widget.TextViewWithFont
+        android:id="@+id/detail_pet_birthday"
+        style="@style/PetDetailItem" />
+
+    <View style="@style/PetDetailDivider" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <oak.widget.TextViewWithFont
+            android:id="@+id/detail_total_steps_title"
+            style="@style/PetDetailItemTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/detail_total_steps" />
+
+        <oak.widget.TextViewWithFont
+            android:id="@+id/detail_average_steps_title"
+            style="@style/PetDetailItemTitle"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/daily_average" />
+
+        <oak.widget.TextViewWithFont
+            android:id="@+id/detail_today_steps_title"
+            style="@style/PetDetailItemTitle"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/today" />
+
+        <oak.widget.TextViewWithFont
+            android:id="@+id/detail_total_steps"
+            style="@style/PetDetailItem"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/detail_total_steps_title" />
+
+        <oak.widget.TextViewWithFont
+            android:id="@+id/detail_average_steps"
+            style="@style/PetDetailItem"
+            android:layout_below="@id/detail_average_steps_title"
+            android:layout_centerHorizontal="true" />
+
+        <oak.widget.TextViewWithFont
+            android:id="@+id/detail_today_steps"
+            style="@style/PetDetailItem"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/detail_today_steps_title" />
+    </RelativeLayout>
+
+    <View style="@style/PetDetailDivider" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/health_layout">
+        <oak.widget.TextViewWithFont
+            style="@style/PetDetailItemTitle"
+            android:text="@string/health_average"
+            android:id="@+id/detail_health_average"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"/>
+        <oak.widget.TextViewWithFont
+            style="@style/PetDetailItemTitle"
+            android:text="@string/today"
+            android:id="@+id/detail_today_health"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+
+</LinearLayout>
