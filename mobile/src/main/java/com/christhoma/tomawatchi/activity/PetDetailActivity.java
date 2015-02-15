@@ -80,43 +80,64 @@ public class PetDetailActivity extends ActionBarActivity {
         LocalDate birthday = new LocalDate(pet.startDate);
         LocalDate now = new LocalDate();
         Months monthsSince = Months.monthsBetween(birthday, now);
-        petBirhday.setText("" + birthday.toString("MMMM dd yyyy") + " / " + monthsSince.getMonths() + " Months");
+        petBirhday.setText("" + birthday.toString("MMMM dd, yyyy") + " / " + monthsSince.getMonths() + " Months");
         averageSteps.setText("" + avgStepsCount);
         todaySteps.setText("" + pet.todaysSteps);
 
     }
 
     public void setHealthIcons(int averageStepsCount) {
-        int fullHeartsCount = pet.fitness / 25;
+        int fullHeartsCount = 0;
+        if (pet.fitness >= 75) {
+            fullHeartsCount = 4;
+        } else if (pet.fitness >= 50) {
+            fullHeartsCount = 3;
+        } else if (pet.fitness >= 25) {
+            fullHeartsCount = 2;
+        } else if (pet.fitness > 0) {
+            fullHeartsCount = 1;
+        } else {
+            fullHeartsCount = 0;
+        }
         int emptyHeartsCount = 4 - fullHeartsCount;
         for (int i = 0; i < fullHeartsCount; i++) {
             ImageView fullHeart = new ImageView(this);
             fullHeart.setVisibility(View.VISIBLE);
-            fullHeart.setImageDrawable(getDrawable(R.drawable.ic_heart_full));
+            fullHeart.setImageDrawable(getResources().getDrawable(R.drawable.ic_heart_full));
             fullHeart.setPadding(4, 0, 4, 0);
             todayHealthLayout.addView(fullHeart);
         }
         for (int j = 0; j < emptyHeartsCount; j++) {
             ImageView emptyHeart = new ImageView(this);
             emptyHeart.setVisibility(View.VISIBLE);
-            emptyHeart.setImageDrawable(getDrawable(R.drawable.ic_heart_outline));
+            emptyHeart.setImageDrawable(getResources().getDrawable(R.drawable.ic_heart_outline));
             emptyHeart.setPadding(4, 0, 4, 0);
             todayHealthLayout.addView(emptyHeart);
         }
 
-        fullHeartsCount = Math.min((averageStepsCount / 1250), 4);
+        if (averageStepsCount >= 3750) {
+            fullHeartsCount = 4;
+        } else if (averageStepsCount >= 2500) {
+            fullHeartsCount = 3;
+        } else if (averageStepsCount >= 1250) {
+            fullHeartsCount = 2;
+        } else if (averageStepsCount > 0) {
+            fullHeartsCount = 1;
+        } else {
+            fullHeartsCount = 0;
+        }
         emptyHeartsCount = 4 - fullHeartsCount;
         for (int i = 0; i < fullHeartsCount; i++) {
             ImageView fullHeart = new ImageView(this);
             fullHeart.setVisibility(View.VISIBLE);
-            fullHeart.setImageDrawable(getDrawable(R.drawable.ic_heart_full));
+            fullHeart.setImageDrawable(getResources().getDrawable(R.drawable.ic_heart_full));
             fullHeart.setPadding(4, 0, 4, 0);
             averageHealthLayout.addView(fullHeart);
         }
         for (int j = 0; j < emptyHeartsCount; j++) {
             ImageView emptyHeart = new ImageView(this);
             emptyHeart.setVisibility(View.VISIBLE);
-            emptyHeart.setImageDrawable(getDrawable(R.drawable.ic_heart_outline));
+            emptyHeart.setImageDrawable(getResources().getDrawable(R.drawable.ic_heart_outline));
             emptyHeart.setPadding(4, 0, 4, 0);
             averageHealthLayout.addView(emptyHeart);
         }

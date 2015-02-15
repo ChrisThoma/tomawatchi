@@ -16,10 +16,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.PetDetailActivity" />
+        <activity android:name=".activity.AboutActivity"/>
 
         <receiver android:name=".service.PetPointsReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".service.PhoneLifecycleReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="android.intent.action.QUICKBOOT_POWEROFF" />
+                <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
@@ -27,11 +36,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".activity.PetDetailActivity" >
-        </activity>
-        <activity
-            android:name=".activity.AboutActivity">
-        </activity>
     </application>
 
 </manifest>

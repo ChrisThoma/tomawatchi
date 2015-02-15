@@ -189,10 +189,21 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     public void refreshContent(Tomawatchi pet) {
-        setContentVisible(true);
         //update UI here
-        int fullImageCount = pet.fitness / 25;
+        int fullImageCount = 0;
+        if (pet.fitness >= 75) {
+            fullImageCount = 4;
+        } else if (pet.fitness >= 50) {
+            fullImageCount = 3;
+        } else if (pet.fitness >= 25) {
+            fullImageCount = 2;
+        } else if (pet.fitness > 0) {
+            fullImageCount = 1;
+        } else {
+            fullImageCount = 0;
+        }
         int emptyImageCount = 4 - fullImageCount;
+
         for (int i = 0; i < fullImageCount; i++) {
             ImageView fullHeart = new ImageView(getActivity());
             fullHeart.setVisibility(View.VISIBLE);
@@ -208,7 +219,17 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
             healthLayout.addView(emptyHeart);
         }
 
-        fullImageCount = pet.hunger / 25;
+        if (pet.hunger >= 75) {
+            fullImageCount = 4;
+        } else if (pet.hunger >= 50) {
+            fullImageCount = 3;
+        } else if (pet.hunger >= 25) {
+            fullImageCount = 2;
+        } else if (pet.hunger > 0) {
+            fullImageCount = 1;
+        } else {
+            fullImageCount = 0;
+        }
         emptyImageCount = 4 - fullImageCount;
         for (int i = 0; i < fullImageCount; i++) {
             ImageView fullHeart = new ImageView(getActivity());
@@ -225,7 +246,17 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
             hungerLayout.addView(emptyHeart);
         }
 
-        fullImageCount = pet.cleanliness / 25;
+        if (pet.cleanliness >= 75) {
+            fullImageCount = 4;
+        } else if (pet.cleanliness >= 50) {
+            fullImageCount = 3;
+        } else if (pet.cleanliness >= 25) {
+            fullImageCount = 2;
+        } else if (pet.cleanliness > 0) {
+            fullImageCount = 1;
+        } else {
+            fullImageCount = 0;
+        }
         emptyImageCount = 4 - fullImageCount;
         for (int i = 0; i < fullImageCount; i++) {
             ImageView fullHeart = new ImageView(getActivity());
@@ -241,6 +272,16 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
             emptyHeart.setPadding(4, 0, 4, 0);
             cleanlinessLayout.addView(emptyHeart);
         }
+        if (pet.age == Tomawatchi.Age.BABY) {
+            gifImageView.setImageDrawable(getResources().getDrawable(R.drawable.character_baby));
+        } else if (pet.age == Tomawatchi.Age.TEEN) {
+            gifImageView.setImageDrawable(getResources().getDrawable(R.drawable.character_child));
+        } else if (pet.age == Tomawatchi.Age.ADULT) {
+            gifImageView.setImageDrawable(getResources().getDrawable(R.drawable.character_teen));
+        } else if (pet.age == Tomawatchi.Age.ELDERLY) {
+            gifImageView.setImageDrawable(getResources().getDrawable(R.drawable.character_adult));
+        }
+        setContentVisible(true);
     }
 
     public void setContentVisible(boolean contentVisible) {
