@@ -27,7 +27,7 @@
             android:layout_marginTop="@dimen/default_margin"
             android:layout_marginRight="@dimen/default_margin"
             android:visibility="gone"
-            android:src="@drawable/btn_go"
+            android:src="@drawable/ic_arrow"
             fab:fab_type="mini"
             fab:fab_colorNormal="@color/darker_yellow"
             fab:fab_colorPressed="@color/pressed_darker_yellow"
@@ -134,7 +134,7 @@
             android:layout_margin="@dimen/default_margin"
             android:text="FEED"
             android:visibility="gone"
-            android:src="@drawable/btn_feed"
+            android:src="@drawable/ic_feed"
             fab:fab_colorNormal="@color/green"
             fab:fab_colorPressed="@color/pressed_green"
             fab:fab_colorRipple="@color/ripple_green" />
@@ -147,7 +147,7 @@
             android:layout_alignParentLeft="true"
             android:layout_margin="@dimen/default_margin"
             android:visibility="gone"
-            android:src="@drawable/btn_clean"
+            android:src="@drawable/ic_clean"
             fab:fab_colorNormal="@color/blue"
             fab:fab_colorPressed="@color/pressed_blue"
             fab:fab_colorRipple="@color/ripple_blue" />

@@ -133,11 +133,11 @@ public class PetCreationFragment extends Fragment {
                     ((MainActivity) getActivity()).pet = pet;
                     ((MainActivity) getActivity()).savePetStats();
 
-                    SharedPreferences prefs = getActivity().getSharedPreferences(Const.PREFS, v.getContext().MODE_PRIVATE);
+                    SharedPreferences prefs = getActivity().getSharedPreferences(Const.PREFS, Context.MODE_PRIVATE);
                     prefs.edit().putBoolean(Const.PET_CREATED, true).apply();
                     prefs.edit().putLong(Const.STARTDATE, pet.startDate).apply();
 
-                    AlarmManager alarmManager = (AlarmManager) v.getContext().getSystemService(v.getContext().ALARM_SERVICE);
+                    AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                     Intent intent = new Intent(getActivity(), PetPointsReceiver.class);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, intent, 0);
                     Calendar calendar = Calendar.getInstance();

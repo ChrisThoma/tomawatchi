@@ -115,13 +115,13 @@ public class PetDetailActivity extends ActionBarActivity {
             todayHealthLayout.addView(emptyHeart);
         }
 
-        if (averageStepsCount >= 3750) {
+        if (averageStepsCount >= 5000) {
             fullHeartsCount = 4;
-        } else if (averageStepsCount >= 2500) {
+        } else if (averageStepsCount >= 3750) {
             fullHeartsCount = 3;
-        } else if (averageStepsCount >= 1250) {
+        } else if (averageStepsCount >= 2500) {
             fullHeartsCount = 2;
-        } else if (averageStepsCount > 0) {
+        } else if (averageStepsCount >= 1250) {
             fullHeartsCount = 1;
         } else {
             fullHeartsCount = 0;
