@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.christhoma.tomawatchi.Const;
@@ -18,16 +19,6 @@ public class PetPointsReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        SharedPreferences prefs = context.getSharedPreferences(Const.PREFS, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        int fitness = prefs.getInt(Const.FITNESS, -1) - 1;
-        int hunger = prefs.getInt(Const.HUNGER, -1) - 1;
-        int cleanliness = prefs.getInt(Const.CLEANLINESS, -1) - 1;
-        editor.putInt(Const.FITNESS, fitness);
-        editor.putInt(Const.HUNGER, hunger);
-        editor.putInt(Const.CLEANLINESS, cleanliness);
-        editor.apply();
-
-        context.sendBroadcast(new Intent(Const.UPDATE_PET));
+        context.startService(new Intent(context, UpdateStatsService.class));
     }
 }

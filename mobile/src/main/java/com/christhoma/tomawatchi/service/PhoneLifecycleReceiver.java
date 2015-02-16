@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.christhoma.tomawatchi.Const;
 
@@ -41,9 +42,10 @@ public class PhoneLifecycleReceiver extends BroadcastReceiver {
 
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent alarmIntent = new Intent(context, PetPointsReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, Const.ALARM_ID, alarmIntent, 0);
             Calendar calendar = Calendar.getInstance();
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60 * 60 * 1000, pendingIntent);
+
         } else if (intent.getAction() == Intent.ACTION_SHUTDOWN || intent.getAction() == "android.intent.action.QUICKBOOT_POWEROFF") {
             Date now = new Date();
             editor.putLong(Const.SHUT_DOWN_TIME, now.getTime()).apply();

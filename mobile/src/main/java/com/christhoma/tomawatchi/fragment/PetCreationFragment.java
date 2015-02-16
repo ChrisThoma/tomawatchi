@@ -139,7 +139,7 @@ public class PetCreationFragment extends Fragment {
 
                     AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                     Intent intent = new Intent(getActivity(), PetPointsReceiver.class);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, intent, 0);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), Const.ALARM_ID, intent, 0);
                     Calendar calendar = Calendar.getInstance();
                     alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60 * 60 * 1000, pendingIntent);
 

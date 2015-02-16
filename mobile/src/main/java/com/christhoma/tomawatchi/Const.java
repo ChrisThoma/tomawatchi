@@ -22,6 +22,7 @@ public class Const {
 
     public static String SHUT_DOWN_TIME = "shutdowntime";
     public static String START_UP_TIME = "startuptime";
+    public static int ALARM_ID = 90;
 
     public static String UPDATE_PET = "updatePet";
 }
