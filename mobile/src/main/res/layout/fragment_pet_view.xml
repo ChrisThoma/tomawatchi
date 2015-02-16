@@ -18,27 +18,16 @@
             android:id="@+id/progress"
             android:layout_centerInParent="true"/>
 
-        <com.melnykov.fab.FloatingActionButton
-            android:id="@+id/arrow_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:visibility="gone"
-            android:src="@drawable/ic_arrow"
-            fab:fab_type="mini"
-            fab:fab_colorNormal="@color/darker_yellow"
-            fab:fab_colorPressed="@color/pressed_darker_yellow"
-            fab:fab_colorRipple="@color/ripple_darker_yellow" />
-
         <oak.widget.TextViewWithFont
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/pet_name_text"
             fab:oakFont="HipsterishFontNormal.ttf"
             android:textSize="@dimen/large_text_size"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingRight="@dimen/double_default_margin"
             android:layout_marginLeft="@dimen/default_margin"
             android:layout_marginTop="@dimen/default_margin"
             android:layout_alignParentTop="true"
@@ -99,6 +88,21 @@
             android:layout_marginRight="@dimen/default_margin"
             android:layout_alignParentRight="true"/>
 
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/arrow_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginRight="@dimen/default_margin"
+            android:visibility="gone"
+            android:src="@drawable/ic_arrow"
+            fab:fab_type="mini"
+            fab:fab_colorNormal="@color/darker_yellow"
+            fab:fab_colorPressed="@color/pressed_darker_yellow"
+            fab:fab_colorRipple="@color/ripple_darker_yellow" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -108,12 +112,28 @@
         android:background="@drawable/bg_clouds"
         android:id="@+id/pet_layout">
 
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_clean"
+            android:visibility="gone"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/clean_animation_view"/>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_food"
+            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/food_animation_view"/>
+
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/gif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/inuwatchi"
             android:visibility="gone" />
 
         <Button

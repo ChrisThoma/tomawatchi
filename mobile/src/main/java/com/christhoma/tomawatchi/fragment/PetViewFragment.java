@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -75,6 +77,10 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
     LinearLayout cleanlinessLayout;
     @InjectView(R.id.pet_hunger_layout)
     LinearLayout hungerLayout;
+    @InjectView(R.id.clean_animation_view)
+    View cleanAnimationView;
+    @InjectView(R.id.food_animation_view)
+    View foodAnimationView;
 
     //FitData
     public static String TAG = "fit";
@@ -140,9 +146,28 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
             }
         });
 
+        final Animation foodAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.right_appear_animation);
+        foodAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                foodAnimationView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         feedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                foodAnimationView.setVisibility(View.VISIBLE);
+                foodAnimationView.startAnimation(foodAnimation);
                 int hunger = ((MainActivity) getActivity()).pet.hunger;
                 if (hunger + 25 > 100) {
                     ((MainActivity) getActivity()).pet.hunger = 100;
@@ -154,9 +179,27 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
             }
         });
 
+        final Animation cleanAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.left_appear_animation);
+        cleanAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                cleanAnimationView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         cleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                cleanAnimationView.setVisibility(View.VISIBLE);
+                cleanAnimationView.startAnimation(cleanAnimation);
                 int cleanliness = ((MainActivity) getActivity()).pet.cleanliness;
                 if (cleanliness + 25 > 100) {
                     ((MainActivity) getActivity()).pet.cleanliness = 100;
@@ -178,17 +221,21 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     public void refreshFitData() {
-        setContentVisible(false);
+//        setContentVisible(false);
         updateStats();
         getActivity().getSupportLoaderManager().restartLoader(1, null, this);
     }
 
     public void updateStats() {
         ((MainActivity) getActivity()).updatePetStats();
-        setContentVisible(false);
+//        setContentVisible(false);
     }
 
     public void refreshContent(Tomawatchi pet) {
+        healthLayout.removeAllViews();
+        hungerLayout.removeAllViews();
+        cleanlinessLayout.removeAllViews();
+
         //update UI here
         int fullImageCount = 0;
         if (pet.fitness >= 75) {
