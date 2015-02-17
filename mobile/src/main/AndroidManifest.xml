@@ -36,6 +36,7 @@
         </receiver>
 
         <service android:name=".service.UpdateStatsService"></service>
+        <service android:name=".service.PetCareService"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

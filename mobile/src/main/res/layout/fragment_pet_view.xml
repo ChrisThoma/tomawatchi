@@ -142,8 +142,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/gif"
             android:layout_centerHorizontal="true"
-            android:text="NOTIFICATION"
-            android:visibility="invisible" />
+            android:text="NOTIFICATION" />
 
         <com.melnykov.fab.FloatingActionButton
             android:id="@+id/feed_button"

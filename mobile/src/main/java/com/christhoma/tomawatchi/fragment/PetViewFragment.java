@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -33,6 +35,7 @@ import com.christhoma.tomawatchi.activity.OtherActivity;
 import com.christhoma.tomawatchi.activity.PetDetailActivity;
 import com.christhoma.tomawatchi.api.SingleDayLoader;
 import com.christhoma.tomawatchi.api.Tomawatchi;
+import com.christhoma.tomawatchi.service.PetCareService;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
@@ -128,21 +131,30 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Intent openMain = new Intent(getActivity(), OtherActivity.class);
+        Intent openMain = new Intent(getActivity(), PetCareService.class);
+        openMain.putExtra(Const.PET_CARE_EXTRA_HUNGER, Const.HUNGER);
+        openMain.putExtra(Const.PET_CARE_EXTRA_CLEANLINESS, Const.CLEANLINESS);
         final NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
         final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getActivity())
-                .setSmallIcon(R.drawable.bulby)
-                .setContentTitle("TITLE")
-                .setContentText("TEXT")
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle("Feed")
+                .setContentText("Feed your pet")
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setAutoCancel(true)
-                .addAction(android.R.drawable.ic_menu_send, "DO A THING", PendingIntent.getActivity(getActivity(), 1, openMain, PendingIntent.FLAG_CANCEL_CURRENT));
+                .setAutoCancel(true);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.bg_food);
+        NotificationCompat.Action feedAction = new NotificationCompat.Action(R.drawable.ic_feed, "Feed me!", PendingIntent.getService(getActivity(), Const.PET_CARE_ID+1, openMain, PendingIntent.FLAG_CANCEL_CURRENT));
+        NotificationCompat.Action cleanAction = new NotificationCompat.Action(R.drawable.ic_clean, "Bathe me!", PendingIntent.getService(getActivity(), Const.PET_CARE_ID+2, openMain, PendingIntent.FLAG_CANCEL_CURRENT));
+        notificationBuilder.extend(new NotificationCompat.WearableExtender()
+                .setBackground(icon)
+                .addAction(feedAction)
+                .addAction(cleanAction)
+        );
 
         notificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("ONCLICK", "ONCLICK");
-                notificationManager.notify(1, notificationBuilder.build());
+                notificationManager.notify(Const.PET_CARE_ID, notificationBuilder.build());
             }
         });
 
@@ -319,6 +331,8 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
             emptyHeart.setPadding(4, 0, 4, 0);
             cleanlinessLayout.addView(emptyHeart);
         }
+
+
         if (pet.age == Tomawatchi.Age.BABY) {
             gifImageView.setImageDrawable(getResources().getDrawable(R.drawable.character_baby));
         } else if (pet.age == Tomawatchi.Age.TEEN) {
