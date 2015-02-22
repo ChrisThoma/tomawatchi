@@ -29,21 +29,15 @@ public class PetCareService extends IntentService {
         int hunger = prefs.getInt(Const.HUNGER, -1);
         int cleanliness = prefs.getInt(Const.CLEANLINESS, -1);
 
-        Bundle extras = intent.getExtras();
-        if (extras != null && extras.containsKey(Const.PET_CARE_EXTRA)) {
-            if (extras.getString(Const.PET_CARE_EXTRA).equals(Const.HUNGER)) {
-                if (hunger + 25 > 100) {
-                    hunger = 100;
-                } else {
-                    hunger += 25;
-                }
-            } else if (extras.getString(Const.PET_CARE_EXTRA).equals(Const.CLEANLINESS)) {
-                if (cleanliness + 25 > 100) {
-                    cleanliness = 100;
-                } else {
-                    cleanliness += 25;
-                }
-            }
+        if (hunger + 25 > 100) {
+            hunger = 100;
+        } else {
+            hunger += 25;
+        }
+        if (cleanliness + 25 > 100) {
+            cleanliness = 100;
+        } else {
+            cleanliness += 25;
         }
 
         notificationManager.cancel(Const.PET_CARE_ID);

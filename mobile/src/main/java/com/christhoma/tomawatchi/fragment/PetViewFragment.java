@@ -66,8 +66,6 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
     FloatingActionButton cleanButton;
     @InjectView(R.id.arrow_button)
     FloatingActionButton arrowButton;
-    @InjectView(R.id.notification_button)
-    Button notificationButton;
     @InjectView(R.id.pet_name_text)
     TextView petName;
     @InjectView(R.id.number_of_steps)
@@ -131,32 +129,6 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Intent openMain = new Intent(getActivity(), PetCareService.class);
-        openMain.putExtra(Const.PET_CARE_EXTRA_HUNGER, Const.HUNGER);
-        openMain.putExtra(Const.PET_CARE_EXTRA_CLEANLINESS, Const.CLEANLINESS);
-        final NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
-        final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getActivity())
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle("Feed")
-                .setContentText("Feed your pet")
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setAutoCancel(true);
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.bg_food);
-        NotificationCompat.Action feedAction = new NotificationCompat.Action(R.drawable.ic_feed, "Feed me!", PendingIntent.getService(getActivity(), Const.PET_CARE_ID+1, openMain, PendingIntent.FLAG_CANCEL_CURRENT));
-        NotificationCompat.Action cleanAction = new NotificationCompat.Action(R.drawable.ic_clean, "Bathe me!", PendingIntent.getService(getActivity(), Const.PET_CARE_ID+2, openMain, PendingIntent.FLAG_CANCEL_CURRENT));
-        notificationBuilder.extend(new NotificationCompat.WearableExtender()
-                .setBackground(icon)
-                .addAction(feedAction)
-                .addAction(cleanAction)
-        );
-
-        notificationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("ONCLICK", "ONCLICK");
-                notificationManager.notify(Const.PET_CARE_ID, notificationBuilder.build());
-            }
-        });
 
         final Animation foodAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.right_appear_animation);
         foodAnimation.setAnimationListener(new Animation.AnimationListener() {

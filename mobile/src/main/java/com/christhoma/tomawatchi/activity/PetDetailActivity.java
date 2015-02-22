@@ -54,7 +54,7 @@ public class PetDetailActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("");
-        getSupportActionBar().setIcon(R.drawable.text_title_bar_tamawatchi);
+        getSupportActionBar().setIcon(R.drawable.text_title_bar_tomawatchi);
 
         if (pet == null) {
             pet = new Tomawatchi();

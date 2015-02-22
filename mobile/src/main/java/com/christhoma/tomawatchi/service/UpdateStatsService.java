@@ -34,6 +34,15 @@ public class UpdateStatsService extends IntentService {
         int fitness = prefs.getInt(Const.FITNESS, -1) - 1;
         int hunger = prefs.getInt(Const.HUNGER, -1) - 1;
         int cleanliness = prefs.getInt(Const.CLEANLINESS, -1) - 1;
+        if (fitness < 0) {
+            fitness = 0;
+        }
+        if (hunger < 0) {
+            hunger = 0;
+        }
+        if (cleanliness < 0) {
+            cleanliness = 0;
+        }
         String name = prefs.getString(Const.NAME, "Tomawatchi");
         editor.putInt(Const.FITNESS, fitness);
         editor.putInt(Const.HUNGER, hunger);
@@ -77,8 +86,10 @@ public class UpdateStatsService extends IntentService {
             wearableExtender.setBackground(icon);
         }
 
-        notificationBuilder.extend(wearableExtender);
 
-        notificationManager.notify(Const.PET_CARE_ID, notificationBuilder.build());
+        if (numberOfActions > 0) {
+            notificationBuilder.extend(wearableExtender);
+            notificationManager.notify(Const.PET_CARE_ID, notificationBuilder.build());
+        }
     }
 }
