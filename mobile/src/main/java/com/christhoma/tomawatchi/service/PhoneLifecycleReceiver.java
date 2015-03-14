@@ -27,7 +27,7 @@ public class PhoneLifecycleReceiver extends BroadcastReceiver {
         SharedPreferences.Editor editor = prefs.edit();
         if (intent.getAction() == Intent.ACTION_BOOT_COMPLETED) {
             LocalDate now = new LocalDate();
-            LocalDate then = new LocalDate(prefs.getLong(Const.SHUT_DOWN_TIME, -1));
+            LocalDate then = new LocalDate(prefs.getLong(Const.SHUT_DOWN_TIME, -1) * 1000);
             int hoursBetween = Hours.hoursBetween(now, then).getHours();
             if (hoursBetween > 0) {
                 hoursBetween--;

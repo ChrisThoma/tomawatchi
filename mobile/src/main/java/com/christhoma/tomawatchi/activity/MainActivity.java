@@ -27,6 +27,7 @@ import com.christhoma.tomawatchi.api.Tomawatchi;
 import com.christhoma.tomawatchi.fragment.PetCreationFragment;
 import com.christhoma.tomawatchi.fragment.PetViewFragment;
 import com.christhoma.tomawatchi.service.PetPointsReceiver;
+import com.christhoma.tomawatchi.service.RestartTimerService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.Scopes;
@@ -39,6 +40,9 @@ import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.OnDataPointListener;
 import com.google.android.gms.fitness.result.DataReadResult;
+
+import org.joda.time.Hours;
+import org.joda.time.LocalDate;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -133,6 +137,12 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 
         Log.d("fit", "connecting");
         if (prefs.getBoolean(Const.PET_CREATED, false)) {
+            LocalDate now = new LocalDate();
+            LocalDate then = new LocalDate(prefs.getLong(Const.LAST_UPDATE_TIME, -1) * 10);
+            int hoursBetween = Hours.hoursBetween(now, then).getHours();
+            if (hoursBetween > 1) {
+                startService(new Intent(this, RestartTimerService.class).putExtra(Const.UPDATES_MISSED, hoursBetween));
+            }
             pet = updatePetStats();
             client.connect();
         }
@@ -173,12 +183,13 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         long startDateDifference = date.getTime() - startDate.getTime();
         int daysAlive = (int) ((((startDateDifference / 1000) / 60) / 60) / 24);
         if (daysAlive <= 0) {
-            int minutesAlive = (int) (((startDateDifference / 1000) / 60) / 60);
+            int minutesAlive = (int) (((startDateDifference / 1000) / 60));
             if (minutesAlive <= 2) {
                 pet.age = Tomawatchi.Age.EGG;
+            } else {
+                pet.age = Tomawatchi.Age.BABY;
             }
-        }
-        if (daysAlive < 2) {
+        } else if (daysAlive < 2) {
             pet.age = Tomawatchi.Age.BABY;
         } else if (daysAlive < 9) {
             pet.age = Tomawatchi.Age.TEEN;

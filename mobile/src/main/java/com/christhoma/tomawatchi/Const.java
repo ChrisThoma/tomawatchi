@@ -28,5 +28,8 @@ public class Const {
     public static String PET_CARE_EXTRA_CLEANLINESS = "pcecleanliness";
     public static int PET_CARE_ID = 456;
 
+    public static String LAST_UPDATE_TIME = "lastupdatetime";
+    public static String UPDATES_MISSED = "updatedmissed";
+
     public static String UPDATE_PET = "updatePet";
 }

@@ -9,6 +9,8 @@ import android.support.v4.app.NotificationManagerCompat;
 
 import com.christhoma.tomawatchi.Const;
 
+import java.util.Date;
+
 /**
  * Created by christhoma on 2/16/15.
  */

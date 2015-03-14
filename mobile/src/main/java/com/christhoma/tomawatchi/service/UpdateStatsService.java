@@ -18,6 +18,8 @@ import com.christhoma.tomawatchi.Const;
 import com.christhoma.tomawatchi.R;
 import com.christhoma.tomawatchi.activity.MainActivity;
 
+import java.util.Date;
+
 /**
  * Created by christhoma on 2/16/15.
  */
@@ -48,6 +50,9 @@ public class UpdateStatsService extends IntentService {
         editor.putInt(Const.FITNESS, fitness);
         editor.putInt(Const.HUNGER, hunger);
         editor.putInt(Const.CLEANLINESS, cleanliness);
+        Date date = new Date();
+        long now = date.getTime();
+        editor.putLong(Const.LAST_UPDATE_TIME, now);
         editor.apply();
 
         sendBroadcast(new Intent(Const.UPDATE_PET));
