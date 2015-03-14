@@ -305,7 +305,9 @@ public class PetViewFragment extends Fragment implements LoaderManager.LoaderCal
         }
 
 
-        if (pet.age == Tomawatchi.Age.BABY) {
+        if (pet.age == Tomawatchi.Age.EGG) {
+            gifImageView.setImageDrawable(getResources().getDrawable(R.drawable.character_egg));
+        } else if (pet.age == Tomawatchi.Age.BABY) {
             gifImageView.setImageDrawable(getResources().getDrawable(R.drawable.character_baby));
         } else if (pet.age == Tomawatchi.Age.TEEN) {
             gifImageView.setImageDrawable(getResources().getDrawable(R.drawable.character_child));

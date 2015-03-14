@@ -17,7 +17,7 @@ public class Tomawatchi {
     public int fitnessTotalStepsCount;
 
     public enum Age {
-        BABY, TEEN, ADULT, ELDERLY, DEDZO
+        EGG, BABY, TEEN, ADULT, ELDERLY, DEDZO
     }
 
     public int getOverallHappiness() {

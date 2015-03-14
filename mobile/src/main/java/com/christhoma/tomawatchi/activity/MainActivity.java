@@ -172,6 +172,12 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 
         long startDateDifference = date.getTime() - startDate.getTime();
         int daysAlive = (int) ((((startDateDifference / 1000) / 60) / 60) / 24);
+        if (daysAlive <= 0) {
+            int minutesAlive = (int) (((startDateDifference / 1000) / 60) / 60);
+            if (minutesAlive <= 2) {
+                pet.age = Tomawatchi.Age.EGG;
+            }
+        }
         if (daysAlive < 2) {
             pet.age = Tomawatchi.Age.BABY;
         } else if (daysAlive < 9) {
