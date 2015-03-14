@@ -16,6 +16,7 @@ import android.util.Log;
 
 import com.christhoma.tomawatchi.Const;
 import com.christhoma.tomawatchi.R;
+import com.christhoma.tomawatchi.activity.MainActivity;
 
 /**
  * Created by christhoma on 2/16/15.
@@ -63,6 +64,8 @@ public class UpdateStatsService extends IntentService {
         NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender();
 
         Intent petCareIntent = new Intent(this, PetCareService.class);
+        Intent launchIntent = new Intent(this, MainActivity.class);
+
         if (hunger == 25 || hunger == 10) {
             numberOfActions++;
             NotificationCompat.Action feedAction = new NotificationCompat.Action(R.drawable.ic_feed, "Feed me!", PendingIntent.getService(this, Const.PET_CARE_ID+1, petCareIntent, PendingIntent.FLAG_CANCEL_CURRENT));
@@ -88,6 +91,7 @@ public class UpdateStatsService extends IntentService {
 
 
         if (numberOfActions > 0) {
+            PendingIntent.getActivity(this, Const.PET_CARE_ID+3, launchIntent, 0);
             notificationBuilder.extend(wearableExtender);
             notificationManager.notify(Const.PET_CARE_ID, notificationBuilder.build());
         }
